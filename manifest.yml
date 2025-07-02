@@ -4,5 +4,21 @@ version: 0.250702.4
 description: "mNY description"
 authors:
   - YD Song
-keywords: [test1, test2]
+
 icon: icon.png
+artifacts:
+  # Files placed here are automatically added to Rhino's Python script paths.
+  # The filename 'mny.py' creates the command 'mny'.
+  rhino-scripts:
+    - commands/mny.py
+
+  # Files placed here are automatically installed as custom display modes.
+  rhino-display-modes:
+    - display_modes/Line Drawing.ini
+    - display_modes/Transparent.ini
+  
+  # 'files' is for everything else that needs to be included in the package,
+  # like your Grasshopper definition and icon.
+  files:
+    - Direct_Sunlight_Analysis.gh
+    - icon.png
