@@ -1,7 +1,7 @@
 # install.py  – runs the first time Rhino loads the package
 import importlib.resources as pkg
-import Rhino
 import Grasshopper as gh
+import Rhino
 import scriptcontext
 
 # Prevent re-import on every Rhino launch -----------------------------
@@ -10,11 +10,13 @@ if scriptcontext.sticky.get(__name__):     # already ran once
 scriptcontext.sticky[__name__] = True
 # ---------------------------------------------------------------------
 
-# 1  register the display mode
-ini_path = pkg.files(__package__) / "MyDisplay.ini"
-Rhino.Display.DisplayModeDescription.ImportFromFile(str(ini_path))   # https://developer.rhino3d.com/api/rhinocommon/rhino.display.displaymodedescription
+# 1)  import every .ini inside the display_modes folder
+mode_dir = pkg.files(__package__) / "display_modes"
+for ini in mode_dir.iterdir():
+    if ini.suffix.lower() == ".ini":
+        Rhino.Display.DisplayModeDescription.ImportFromFile(str(ini))
 
-# 2  open the GH tutorial (only if it’s not already open)
+# 2)  open the tutorial GH document (only if not open already)
 gh_path = pkg.files(__package__) / "Direct_Sunlight_Analysis.gh"
 if gh.Instances.DocumentServer.FindDocument(str(gh_path)) is None:
     gh.Instances.DocumentEditorEnabled = True
