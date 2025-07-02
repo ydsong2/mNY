@@ -6,3 +6,10 @@ authors:
   - YD Song
 
 icon: icon.png
+
+# This is the most important part for you!
+# It defines the commands this package adds to Rhino.
+commands:
+  - name: Mny # The command you type in Rhino.
+    # The path to the script to run, relative to this manifest.yml file.
+    path: lib/mny_command.p
