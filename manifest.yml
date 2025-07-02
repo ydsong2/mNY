@@ -1,0 +1,8 @@
+# manifest.yml
+name: mNY
+version: 0.250701.001
+description: "mNY description"
+authors:
+  - Y.Song@morphosis.net
+keywords: [test1, test2]
+icon: icon.png
