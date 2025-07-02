@@ -1,7 +1,6 @@
 name: mny
-version: 0.250702.10
-authors:
-- YD Song
+version: 0.250702.11
+author: "YD Song"
 description: test
 files:                     # tell Yak to include these two files
   - Direct_Sunlight_Analysis.gh
