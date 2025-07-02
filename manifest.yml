@@ -1,12 +1,8 @@
-# manifest.yml
-name: mNY
-version: 0.250702.9
-description: "mNY description"
+name: mny
+version: 0.1.0
 authors:
-  - YD Song
-
-icon: icon.png
-
-files:
+- YD Song
+description: test
+files:                     # tell Yak to include these two files
   - Direct_Sunlight_Analysis.gh
   - install.py

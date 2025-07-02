@@ -1,35 +1,43 @@
 """
-Runs once per Rhino session after the package is loaded.
-Creates/updates a Rhino alias called `Mny`
-so the user can simply type `Mny` to open the GH file.
+install.py – executed once per Rhino session after the package is loaded.
+Creates (or updates) the alias “Mny” that runs the packaged Grasshopper file.
 """
-
-import os
+import os, traceback
+import rhinoscriptsyntax as rs            # AddAlias lives here
 import scriptcontext as sc
-import rhinoscriptsyntax as rs
 
-# ---------- DEBUG OUTPUT ----------
-print("🟢 Mny install.py starting")
+ALIAS_NAME  = "Mny"
+GH_FILENAME = "Direct_Sunlight_Analysis.gh"
 
-# Prevent re-import every time Rhino loads another plug-in
-if sc.sticky.get("Mny_Initialized"):
-    print("🔄 Mny already initialized this session – skipping")
-    raise SystemExit
-sc.sticky["Mny_Initialized"] = True
-print("✅ First run in this session")
+def main():
+    try:
+        print("🟢  mny | install.py starting…")
 
-# ---------- PATH TO THE .GH FILE ----------
-pkg_dir = os.path.dirname(__file__)
-gh_path = os.path.join(pkg_dir, "Direct_Sunlight_Analysis.gh")
-print(f"📄 Grasshopper file resolved to:\n    {gh_path}")
+        # Run only once per Rhino session
+        if sc.sticky.get("mny_init"):
+            print("🔄  mny | already initialised – skipping")
+            return
+        sc.sticky["mny_init"] = True
+        print("✅  mny | first run in this session")
 
-# ---------- BUILD THE MACRO ----------
-#  _GrasshopperOpenDocument is a built-in Rhino command.
-macro_body = f'! _-GrasshopperOpenDocument "{gh_path}" _Enter'
-alias_name = "Mny"
+        # Full path to the .gh inside the installed package
+        pkg_dir = os.path.dirname(__file__)
+        gh_path = os.path.join(pkg_dir, GH_FILENAME)
+        if not os.path.exists(gh_path):
+            print(f"❌  mny | {gh_path} not found – aborting")
+            return
+        print(f"📄  mny | GH file = {gh_path}")
 
-# ---------- CREATE / UPDATE ALIAS ----------
-print(f"⚙️  Setting alias {alias_name!r} → {macro_body!r}")
-rs.AddAlias(alias_name, macro_body)          # overwrites if it already exists
+        # Macro that GrasshopperPlayer understands
+        macro = f'! _-GrasshopperPlayer "{gh_path}" _Enter'
 
-print("🏁 Mny install.py finished")
+        # Create / overwrite the alias
+        print(f"⚙️   mny | rs.AddAlias('{ALIAS_NAME}', '{macro}')")
+        rs.AddAlias(ALIAS_NAME, macro)    # overwrites if it exists  [oai_citation:0‡developer.rhino3d.com](https://developer.rhino3d.com/api/rhinoscript/application_methods/addalias.htm?utm_source=chatgpt.com)
+
+        print("🏁  mny | install.py finished")
+    except Exception:
+        print("🔥  mny | install.py crashed:")
+        traceback.print_exc()
+
+main()
